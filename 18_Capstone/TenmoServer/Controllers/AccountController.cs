@@ -34,7 +34,7 @@ namespace TenmoServer.Controllers
             }
             return acc;
         }
-        private int GetUserId()
+        public int GetUserId()
         {
             System.Security.Claims.Claim claim = User.Claims.Where(c => c.Type == "sub").FirstOrDefault();
             if (claim == null)

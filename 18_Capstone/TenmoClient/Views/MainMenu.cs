@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TenmoClient.Data;
+using TenmoServer.Controllers;
 using TenmoServer.DAO;
 using TenmoServer.Models;
 
@@ -10,7 +11,7 @@ namespace TenmoClient.Views
 {
     public class MainMenu : ConsoleMenu
     {
-        
+        //IAccountDAO accountDAO;
 
         public MainMenu()
         {
@@ -34,9 +35,7 @@ namespace TenmoClient.Views
 
             //Account acc = accountDAO.GetAccount(id);
 
-            
-
-            Console.WriteLine($"Your current account balance is: {AccountService.GetBalance()}");
+            //Console.WriteLine($"Your current account balance is: {acc.Balance}");
 
             return MenuOptionResult.WaitAfterMenuSelection;
         }

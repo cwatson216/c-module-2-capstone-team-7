@@ -10,7 +10,7 @@ namespace TenmoClient.Views
 
     public class LoginRegisterMenu : ConsoleMenu
     {
-        
+        IAccountDAO accountDAO;
 
         private readonly AuthService authService;
 
