@@ -3,14 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TenmoClient.Data;
+using TenmoServer.DAO;
+using TenmoServer.Models;
 
 namespace TenmoClient.Views
 {
     public class MainMenu : ConsoleMenu
     {
+        private IAccountDAO accountDAO;
+        private IUserDAO userDAO;
 
-        public MainMenu()
-        { 
+        public MainMenu(IAccountDAO accountDAO, IUserDAO userDAO)
+        {
+            this.accountDAO = accountDAO;
+            this.userDAO = userDAO;
+
             AddOption("View your current balance", ViewBalance)
                 .AddOption("View your past transfers", ViewTransfers)
                 .AddOption("View your pending requests", ViewRequests)
@@ -27,7 +34,9 @@ namespace TenmoClient.Views
 
         private MenuOptionResult ViewBalance()
         {
-            Console.WriteLine("Not yet implemented!");
+            User u = new User();
+
+            Console.WriteLine(accountDAO.GetAccount(u.UserId));
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 
