@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TenmoClient.Data;
+using TenmoServer.DAO;
 
 namespace TenmoClient.Views
 {
 
     public class LoginRegisterMenu : ConsoleMenu
     {
+        
+
         private readonly AuthService authService;
 
         public LoginRegisterMenu(AuthService authService)

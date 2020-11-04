@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TenmoServer.DAO;
@@ -20,15 +21,29 @@ namespace TenmoServer.Controllers
             this.accountDAO = accountDAO;
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Account> GetAccount(int userId)
+        [HttpGet("balance")]
+        [Authorize]
+        public ActionResult<Account> GetAccount()
         {
-            Account acc = accountDAO.GetAccount(userId);
+            int id = GetUserId();
+
+            Account acc = accountDAO.GetAccount(id);
             if (acc == null)
             {
                 return NotFound();
             }
             return acc;
+        }
+        private int GetUserId()
+        {
+            System.Security.Claims.Claim claim = User.Claims.Where(c => c.Type == "sub").FirstOrDefault();
+            if (claim == null)
+            {
+                return 0;
+            } else
+            {
+                return Convert.ToInt32(claim.Value);
+            }
         }
     }
 

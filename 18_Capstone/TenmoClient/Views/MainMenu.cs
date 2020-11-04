@@ -10,8 +10,7 @@ namespace TenmoClient.Views
 {
     public class MainMenu : ConsoleMenu
     {
-        private IUserDAO userDAO;
-        private IAccountDAO accountDAO;
+
 
         public MainMenu()
         {
@@ -34,9 +33,9 @@ namespace TenmoClient.Views
         {
             int id = UserService.GetUserId();
 
-            Account acc = accountDAO.GetAccount(id);
+            //Account acc = accountDAO.GetAccount(id);
 
-            Console.WriteLine($"Your current account balance is: {acc.Balance}");
+            //Console.WriteLine($"Your current account balance is: {acc.Balance}");
 
             return MenuOptionResult.WaitAfterMenuSelection;
         }
