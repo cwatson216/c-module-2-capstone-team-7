@@ -11,8 +11,6 @@ namespace TenmoClient.Views
 {
     public class MainMenu : ConsoleMenu
     {
-        //IAccountDAO accountDAO;
-
         public MainMenu()
         {
             AddOption("View your current balance", ViewBalance)
@@ -35,7 +33,11 @@ namespace TenmoClient.Views
 
             //Account acc = accountDAO.GetAccount(id);
 
-            //Console.WriteLine($"Your current account balance is: {acc.Balance}");
+            //Console.WriteLine($"Your current account balance is: {accountDAO.}");
+
+            ////decimal i = AccountService.GetBalance(UserService.GetUserId());
+
+            //Console.WriteLine(i);
 
             return MenuOptionResult.WaitAfterMenuSelection;
         }

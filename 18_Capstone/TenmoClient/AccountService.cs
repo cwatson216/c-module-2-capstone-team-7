@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using TenmoClient.Data;
+using TenmoServer.Controllers;
+using TenmoServer.Models;
 
 namespace TenmoClient
 {
@@ -13,7 +15,7 @@ namespace TenmoClient
         {
             acc = account;
         }
-        public static decimal GetBalance()
+        public static decimal GetBalance(int id)
         {
             return acc.Balance;
         }

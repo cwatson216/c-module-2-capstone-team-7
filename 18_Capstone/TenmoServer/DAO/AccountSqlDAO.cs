@@ -15,7 +15,6 @@ namespace TenmoServer.DAO
         public AccountSqlDAO(string dbConnectionString)
         {
             connectionString = dbConnectionString;
-
         }
 
         public Account GetAccount(int userId)
@@ -45,7 +44,7 @@ namespace TenmoServer.DAO
 
             return returnAccount;
         }
-        private Account GetAccountFromReader(SqlDataReader reader)
+        public Account GetAccountFromReader(SqlDataReader reader)
         {
             Account acc = new Account
             {
