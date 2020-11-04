@@ -10,10 +10,12 @@ namespace TenmoClient.Views
 {
     public class MainMenu : ConsoleMenu
     {
-        IUserDAO userDAO;
+        private IUserDAO userDAO;
+        private IAccountDAO accountDAO;
 
         public MainMenu()
         {
+
             AddOption("View your current balance", ViewBalance)
                 .AddOption("View your past transfers", ViewTransfers)
                 .AddOption("View your pending requests", ViewRequests)
@@ -28,11 +30,14 @@ namespace TenmoClient.Views
             Console.WriteLine($"TE Account Menu for User: {UserService.GetUserName()}");
         }
 
-        private MenuOptionResult ViewBalance(/*IUserDAO userDAO*/)
+        private MenuOptionResult ViewBalance()
         {
-            //int id = userDAO.
+            int id = UserService.GetUserId();
 
-            //Console.WriteLine(accountDAO.GetAccount(u.UserId));
+            Account acc = accountDAO.GetAccount(id);
+
+            Console.WriteLine($"Your current account balance is: {acc.Balance}");
+
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 
