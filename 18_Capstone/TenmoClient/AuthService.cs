@@ -129,6 +129,9 @@ namespace TenmoClient
         }
         public bool Transfer(int userId, int transferId, decimal amount)
         {
+            int int1 = userId;
+            int int2 = transferId;
+            decimal dec3 = amount;
             RestRequest request = new RestRequest(API_BASE_URL + "account");
             client.Authenticator = new JwtAuthenticator(UserService.GetToken());
             IRestResponse response = client.Put(request);

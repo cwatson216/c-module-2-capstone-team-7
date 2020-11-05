@@ -66,7 +66,9 @@ namespace TenmoClient.Views
             Console.Write("Enter amount: ");
             decimal amount = Convert.ToDecimal(Console.ReadLine());
 
-            authService.Transfer(UserService.GetUserId(), id, amount);
+            int userId = UserService.GetUserId();
+
+            authService.Transfer(userId, id, amount);
 
             return MenuOptionResult.WaitAfterMenuSelection;
         }
