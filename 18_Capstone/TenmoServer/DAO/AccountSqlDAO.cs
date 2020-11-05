@@ -56,18 +56,22 @@ namespace TenmoServer.DAO
             //decimal newTranBalance = tranAcc.Balance + amount;
             //decimal newAccBalance = acc.Balance - amount;
 
-            SqlConnection conn = new SqlConnection(connectionString);
-            SqlTransaction transaction;
+            //SqlConnection conn = new SqlConnection(connectionString);
+            //SqlTransaction transaction;
 
             if (acc.Balance >= amount)
             {
-                conn.Open();
-                transaction = conn.BeginTransaction();
+                //conn.Open();
+                //transaction = conn.BeginTransaction();
                 try
                 {
-                    using (conn)
+                    using (SqlConnection conn = new SqlConnection(connectionString))
                     {
-                        SqlCommand cmd = new SqlCommand($"INSERT into transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount) Values (2, 2, @fromId, @toId, @ammount)");
+                        SqlTransaction transaction;
+                        conn.Open();
+                        transaction = conn.BeginTransaction();
+
+                        SqlCommand cmd = new SqlCommand($"INSERT into transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount) Values (2, 2, @fromId, @toId, @ammount)", conn);
                         cmd.Parameters.AddWithValue("@fromId", userId);
                         cmd.Parameters.AddWithValue("@toId", transferId);
                         cmd.Parameters.AddWithValue("@ammount", amount);
@@ -75,19 +79,20 @@ namespace TenmoServer.DAO
 
                         int i = Convert.ToInt32(new SqlCommand("Select @@IDENTITY = @identity"));
 
-                        SqlCommand cmdBalanceDec = new SqlCommand($"UPDATE accounts set balance = balance - (select amount from transfers where transfer_id = {i}) where account_id = (select account_from from transfers where transfer_id = {i})");
+                        SqlCommand cmdBalanceDec = new SqlCommand($"UPDATE accounts set balance = balance - (select amount from transfers where transfer_id = {i}) where account_id = (select account_from from transfers where transfer_id = {i})", conn);
                         cmdBalanceDec.ExecuteNonQuery();
-                        SqlCommand cmdBalanceAdd = new SqlCommand($"UPDATE accounts set balance = balance + (select amount from transfers where transfer_id = {i}) where account_id = (select account_to from transfers where transfer_id = {i})");
+                        SqlCommand cmdBalanceAdd = new SqlCommand($"UPDATE accounts set balance = balance + (select amount from transfers where transfer_id = {i}) where account_id = (select account_to from transfers where transfer_id = {i})", conn);
                         cmdBalanceAdd.ExecuteNonQuery();
                         transaction.Commit();
                     }
                 }
                 catch (SqlException)
                 {
-                    transaction.Rollback();
+                    throw;
                 }
             } else
             {
+                //transaction.Rollback();
                 Console.WriteLine("You don't have enough money!");
             }
         }
