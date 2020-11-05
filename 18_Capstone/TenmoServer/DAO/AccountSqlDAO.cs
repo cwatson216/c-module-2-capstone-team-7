@@ -11,8 +11,6 @@ namespace TenmoServer.DAO
     public class AccountSqlDAO : IAccountDAO
     {
         private readonly string connectionString;
-        //private decimal balance;
-
         public AccountSqlDAO(string dbConnectionString)
         {
             connectionString = dbConnectionString;
@@ -52,17 +50,9 @@ namespace TenmoServer.DAO
             decimal dec3 = amount;
 
             Account acc = GetAccount(userId);
-            //Account tranAcc = GetAccount(transferId);
-            //decimal newTranBalance = tranAcc.Balance + amount;
-            //decimal newAccBalance = acc.Balance - amount;
-
-            //SqlConnection conn = new SqlConnection(connectionString);
-            //SqlTransaction transaction;
 
             if (acc.Balance >= amount)
             {
-                //conn.Open();
-                //transaction = conn.BeginTransaction();
                 try
                 {
                     using (SqlConnection conn = new SqlConnection(connectionString))
@@ -92,7 +82,6 @@ namespace TenmoServer.DAO
                 }
             } else
             {
-                //transaction.Rollback();
                 Console.WriteLine("You don't have enough money!");
             }
         }

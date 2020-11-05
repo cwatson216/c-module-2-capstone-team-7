@@ -50,12 +50,11 @@ namespace TenmoClient.Views
         private MenuOptionResult SendTEBucks()
         {
             Data.API_Account_Transfer transfer = new Data.API_Account_Transfer();
-
             AuthService authService = new AuthService();
             List<API_User> list = authService.ReturnUsers();
 
             Console.WriteLine("________________________________");
-            Console.WriteLine("Users ID\t   Name");
+            Console.WriteLine("Users ID\t  Name");
 
             foreach (API_User l in list)
             {
@@ -63,13 +62,37 @@ namespace TenmoClient.Views
             }
             Console.WriteLine("________________________________");
             Console.WriteLine();
+
             Console.Write("Enter ID of user you are sending to (0 to cancel): ");
             transfer.TransferId = Convert.ToInt32(Console.ReadLine());
+
+            if (transfer.TransferId == 0)
+            {
+                Console.WriteLine("The transaction was canceled!");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+
+            if (transfer.TransferId > list.Count)
+            {
+                Console.WriteLine("This user does not exist!");
+                return MenuOptionResult.WaitAfterMenuSelection;
+                
+            }
+
             Console.Write("Enter amount: ");
             transfer.Amount = Convert.ToDecimal(Console.ReadLine());
             transfer.UserId = UserService.GetUserId();
 
             authService.Transfer(transfer);
+
+            if (transfer.Amount > authService.GetBalance())
+            {
+                Console.WriteLine("You don't have enough money in your account!");
+            }
+            else
+            {
+                Console.WriteLine("Success! Transaction was completed!");
+            }
 
             return MenuOptionResult.WaitAfterMenuSelection;
         }
