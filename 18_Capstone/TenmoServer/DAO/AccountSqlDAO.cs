@@ -41,9 +41,40 @@ namespace TenmoServer.DAO
             {
                 throw;
             }
-
             return returnAccount;
         }
+
+        public void Transfer(int userId, int transferId, decimal amount)
+        {
+            Account acc = GetAccount(userId);
+            Account tranAcc = GetAccount(transferId);
+            decimal newTranBalance = tranAcc.Balance + amount;
+            decimal newAccBalance = acc.Balance - amount;
+
+            if (acc.Balance < amount)
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        conn.Open();
+
+                        SqlCommand cmd = new SqlCommand($"UPDATE accounts SET balance = {newTranBalance} WHERE user_id = {transferId}");
+                        cmd.ExecuteNonQuery();
+                        SqlCommand cmd2 = new SqlCommand($"UPDATE accounts SET balance = {newAccBalance} WHERE user_id = {userId}");
+                        cmd2.ExecuteNonQuery();
+                    }
+                }
+                catch (SqlException)
+                {
+                    throw;
+                }
+            } else
+            {
+                Console.WriteLine("You don't have enough money!");
+            }
+        }
+
         public Account GetAccountFromReader(SqlDataReader reader)
         {
             Account acc = new Account

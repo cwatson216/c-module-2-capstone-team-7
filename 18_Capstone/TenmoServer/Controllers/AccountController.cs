@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Remotion.Linq.Parsing.ExpressionVisitors;
 using TenmoServer.DAO;
 using TenmoServer.Models;
 
@@ -50,8 +51,16 @@ namespace TenmoServer.Controllers
             return list;
         }
 
-        [HttpGet()]
-        [Authorize]
+        //[HttpGet]
+        //[Authorize]
+        //public ActionResult Transfer(int id, int tranId, decimal balance)
+        //{
+        //    //int id = GetUserId();
+        //    //int tranId = 
+
+        //    accountDAO.Transfer(id, tranId, balance);
+        //    return Ok();
+        //}
 
         [HttpGet("current_user")]
         [Authorize]
