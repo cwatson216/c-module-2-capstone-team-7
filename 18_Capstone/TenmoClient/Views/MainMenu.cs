@@ -49,6 +49,8 @@ namespace TenmoClient.Views
 
         private MenuOptionResult SendTEBucks()
         {
+            Data.API_Account_Transfer transfer = new Data.API_Account_Transfer();
+
             AuthService authService = new AuthService();
             List<API_User> list = authService.ReturnUsers();
 
@@ -62,13 +64,12 @@ namespace TenmoClient.Views
             Console.WriteLine("________________________________");
             Console.WriteLine();
             Console.Write("Enter ID of user you are sending to (0 to cancel): ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            transfer.TransferId = Convert.ToInt32(Console.ReadLine());
             Console.Write("Enter amount: ");
-            decimal amount = Convert.ToDecimal(Console.ReadLine());
+            transfer.Amount = Convert.ToDecimal(Console.ReadLine());
+            transfer.UserId = UserService.GetUserId();
 
-            int userId = UserService.GetUserId();
-
-            authService.Transfer(userId, id, amount);
+            authService.Transfer(transfer);
 
             return MenuOptionResult.WaitAfterMenuSelection;
         }

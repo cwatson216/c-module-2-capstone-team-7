@@ -47,6 +47,10 @@ namespace TenmoServer.DAO
 
         public void Transfer(int userId, int transferId, decimal amount)
         {
+            int int1 = userId;
+            int int2 = transferId;
+            decimal dec3 = amount;
+
             Account acc = GetAccount(userId);
             //Account tranAcc = GetAccount(transferId);
             //decimal newTranBalance = tranAcc.Balance + amount;
@@ -55,7 +59,7 @@ namespace TenmoServer.DAO
             SqlConnection conn = new SqlConnection(connectionString);
             SqlTransaction transaction;
 
-            if (acc.Balance < amount)
+            if (acc.Balance >= amount)
             {
                 conn.Open();
                 transaction = conn.BeginTransaction();

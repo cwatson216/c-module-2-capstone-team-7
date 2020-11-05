@@ -53,12 +53,13 @@ namespace TenmoServer.Controllers
 
         [HttpPut]
         [Authorize]
-        public ActionResult Transfer(int id, int tranId, decimal balance)
+        public ActionResult Transfer(API_Account_Transfer transfer)
         {
-            //int id = GetUserId();
-            //int tranId =
+            int int1 = transfer.UserId;
+            int int2 = transfer.TransferId;
+            decimal dec3 = transfer.Amount;
 
-            accountDAO.Transfer(id, tranId, balance);
+            accountDAO.Transfer(int1, int2, dec3);
             return Ok();
         }
 

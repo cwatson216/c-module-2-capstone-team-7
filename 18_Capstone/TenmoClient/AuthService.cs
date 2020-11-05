@@ -127,12 +127,18 @@ namespace TenmoClient
                 return response.Data;
             }
         }
-        public bool Transfer(int userId, int transferId, decimal amount)
+        public bool Transfer(API_Account_Transfer transfer)
         {
-            int int1 = userId;
-            int int2 = transferId;
-            decimal dec3 = amount;
+            //transfer.Amount = amount;
+            //transfer.TransferId = transferId;
+            //transfer.UserId = userId;
+
+            //int int1 = userId;
+            //int int2 = transferId;
+            //decimal dec3 = amount;
+
             RestRequest request = new RestRequest(API_BASE_URL + "account");
+            request.AddJsonBody(transfer);
             client.Authenticator = new JwtAuthenticator(UserService.GetToken());
             IRestResponse response = client.Put(request);
 
