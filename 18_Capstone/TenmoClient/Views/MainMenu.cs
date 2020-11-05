@@ -29,16 +29,9 @@ namespace TenmoClient.Views
 
         private MenuOptionResult ViewBalance()
         {
-            //int id = UserService.GetUserId();
-
-            //Account acc = accountDAO.GetAccount(id);
-
-            //Console.WriteLine($"Your current account balance is: {accountDAO.}");
-
-            ////decimal i = AccountService.GetBalance(UserService.GetUserId());
-
-            //Console.WriteLine(i);
-
+            AuthService authService = new AuthService();
+            decimal d = authService.GetBalance();
+            Console.WriteLine($"Your current account balance is: ${d}");
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 

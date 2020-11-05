@@ -70,15 +70,16 @@ namespace TenmoClient
             }
         }
 
-        public API_Account GetAccount(API_Account userId)
+        public decimal GetBalance()
         {
-            RestRequest request = new RestRequest(API_BASE_URL + $"account/account_id?user_id={userId}");
-            IRestResponse<API_Account> response = client.Get<API_Account>(request);
+            RestRequest request = new RestRequest(API_BASE_URL + $"account/current_user");
+            client.Authenticator = new JwtAuthenticator(UserService.GetToken());
+            IRestResponse<decimal> response = client.Get<decimal>(request);
 
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
                 Console.WriteLine("An error occurred communicating with the server.");
-                return null;
+                return 0;
             }
             else if (!response.IsSuccessful)
             {
@@ -90,7 +91,7 @@ namespace TenmoClient
                 {
                     Console.WriteLine("An error response was received from the server. The status code is " + (int)response.StatusCode);
                 }
-                return null;
+                return 0;
             }
             else
             {

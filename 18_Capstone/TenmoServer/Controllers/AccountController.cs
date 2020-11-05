@@ -21,9 +21,22 @@ namespace TenmoServer.Controllers
             this.accountDAO = accountDAO;
         }
 
-        [HttpGet("balance")]
+        //[HttpGet("balance")]
+        //[Authorize]
+        //public ActionResult<Account> GetAccount()
+        //{
+        //    int id = GetUserId();
+
+        //    Account acc = accountDAO.GetAccount(id);
+        //    if (acc == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return acc;
+        //}
+        [HttpGet("current_user")]
         [Authorize]
-        public ActionResult<Account> GetAccount()
+        public ActionResult<decimal> GetBalance()
         {
             int id = GetUserId();
 
@@ -32,7 +45,7 @@ namespace TenmoServer.Controllers
             {
                 return NotFound();
             }
-            return acc;
+            return acc.Balance;
         }
         public int GetUserId()
         {
