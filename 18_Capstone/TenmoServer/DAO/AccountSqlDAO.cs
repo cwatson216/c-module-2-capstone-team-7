@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using TenmoServer.Models;
 
 namespace TenmoServer.DAO
@@ -47,27 +48,39 @@ namespace TenmoServer.DAO
         public void Transfer(int userId, int transferId, decimal amount)
         {
             Account acc = GetAccount(userId);
-            Account tranAcc = GetAccount(transferId);
-            decimal newTranBalance = tranAcc.Balance + amount;
-            decimal newAccBalance = acc.Balance - amount;
+            //Account tranAcc = GetAccount(transferId);
+            //decimal newTranBalance = tranAcc.Balance + amount;
+            //decimal newAccBalance = acc.Balance - amount;
+
+            SqlConnection conn = new SqlConnection(connectionString);
+            SqlTransaction transaction;
 
             if (acc.Balance < amount)
             {
+                conn.Open();
+                transaction = conn.BeginTransaction();
                 try
                 {
-                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    using (conn)
                     {
-                        conn.Open();
-
-                        SqlCommand cmd = new SqlCommand($"UPDATE accounts SET balance = {newTranBalance} WHERE user_id = {transferId}");
+                        SqlCommand cmd = new SqlCommand($"INSERT into transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount) Values (2, 2, @fromId, @toId, @ammount)");
+                        cmd.Parameters.AddWithValue("@fromId", userId);
+                        cmd.Parameters.AddWithValue("@toId", transferId);
+                        cmd.Parameters.AddWithValue("@ammount", amount);
                         cmd.ExecuteNonQuery();
-                        SqlCommand cmd2 = new SqlCommand($"UPDATE accounts SET balance = {newAccBalance} WHERE user_id = {userId}");
-                        cmd2.ExecuteNonQuery();
+
+                        int i = Convert.ToInt32(new SqlCommand("Select @@IDENTITY = @identity"));
+
+                        SqlCommand cmdBalanceDec = new SqlCommand($"UPDATE accounts set balance = balance - (select amount from transfers where transfer_id = {i}) where account_id = (select account_from from transfers where transfer_id = {i})");
+                        cmdBalanceDec.ExecuteNonQuery();
+                        SqlCommand cmdBalanceAdd = new SqlCommand($"UPDATE accounts set balance = balance + (select amount from transfers where transfer_id = {i}) where account_id = (select account_to from transfers where transfer_id = {i})");
+                        cmdBalanceAdd.ExecuteNonQuery();
+                        transaction.Commit();
                     }
                 }
                 catch (SqlException)
                 {
-                    throw;
+                    transaction.Rollback();
                 }
             } else
             {
