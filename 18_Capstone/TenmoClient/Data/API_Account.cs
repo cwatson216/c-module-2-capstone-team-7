@@ -11,10 +11,12 @@ namespace TenmoClient.Data
         public decimal Balance { get; set; }
     }
 
-    public class API_Account_Transfer
+    public class Transfer
     {
         public int UserId { get; set; }
         public int TransferId { get; set; }
         public decimal Amount { get; set; }
+        public string Name { get; set; } = "";
     }
+
 }

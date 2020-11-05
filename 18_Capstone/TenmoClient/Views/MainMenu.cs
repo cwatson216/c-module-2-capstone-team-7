@@ -37,6 +37,9 @@ namespace TenmoClient.Views
 
         private MenuOptionResult ViewTransfers()
         {
+
+
+
             Console.WriteLine("Not yet implemented!");
             return MenuOptionResult.WaitAfterMenuSelection;
         }
@@ -49,7 +52,7 @@ namespace TenmoClient.Views
 
         private MenuOptionResult SendTEBucks()
         {
-            Data.API_Account_Transfer transfer = new Data.API_Account_Transfer();
+            Data.Transfer transfer = new Data.Transfer();
             AuthService authService = new AuthService();
             List<API_User> list = authService.ReturnUsers();
 
