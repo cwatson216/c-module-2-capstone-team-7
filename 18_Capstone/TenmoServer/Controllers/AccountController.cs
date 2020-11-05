@@ -15,25 +15,44 @@ namespace TenmoServer.Controllers
     public class AccountController : ControllerBase
     {
         private IAccountDAO accountDAO;
+        private IUserDAO userDAO;
 
-        public AccountController(IAccountDAO accountDAO)
+        public AccountController(IAccountDAO accountDAO, IUserDAO userDAO)
         {
             this.accountDAO = accountDAO;
+            this.userDAO = userDAO;
         }
 
-        //[HttpGet("balance")]
-        //[Authorize]
-        //public ActionResult<Account> GetAccount()
-        //{
-        //    int id = GetUserId();
+        [HttpGet("user")]
+        [Authorize]
+        public ActionResult<Account> GetAccount()
+        {
+            int id = GetUserId();
 
-        //    Account acc = accountDAO.GetAccount(id);
-        //    if (acc == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return acc;
-        //}
+            Account acc = accountDAO.GetAccount(id);
+            if (acc == null)
+            {
+                return NotFound();
+            }
+            return acc;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult<List<User>> GetUsers()
+        {
+            List<User> list = userDAO.GetUsers();
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return list;
+        }
+
+        [HttpGet()]
+        [Authorize]
+
         [HttpGet("current_user")]
         [Authorize]
         public ActionResult<decimal> GetBalance()

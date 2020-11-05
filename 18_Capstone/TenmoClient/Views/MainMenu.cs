@@ -49,7 +49,23 @@ namespace TenmoClient.Views
 
         private MenuOptionResult SendTEBucks()
         {
-            Console.WriteLine("Not yet implemented!");
+            AuthService authService = new AuthService();
+            List<API_User> list = authService.ReturnUsers();
+
+            Console.WriteLine("________________________________");
+            Console.WriteLine("Users ID\t   Name");
+
+            foreach (API_User l in list)
+            {
+                Console.WriteLine($"{l.UserId}\t      {l.Username}");
+            }
+            Console.WriteLine("________________________________");
+            Console.WriteLine();
+            Console.Write("Enter ID of user you are sending to (0 to cancel): ");
+            int id = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Enter amount: ");
+            decimal amount = Convert.ToDecimal(Console.ReadLine());
+
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 
