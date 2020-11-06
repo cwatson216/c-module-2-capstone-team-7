@@ -88,8 +88,6 @@ namespace TenmoServer.DAO
         {
             List<Transfer> returnTransfers = new List<Transfer>();
             
-            //Account acc = GetAccount(userId);
-
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -133,7 +131,6 @@ namespace TenmoServer.DAO
                 FromName = Convert.ToString(reader["from"]),
                 ToName = Convert.ToString(reader["to"]),
                 Amount = Convert.ToDecimal(reader["amount"]),
-                //UserId = Convert.ToInt32(reader["@userid"])
             };
 
             return tr;
