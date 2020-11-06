@@ -42,14 +42,27 @@ namespace TenmoClient.Views
             transfer.UserId = UserService.GetUserId();
             List<Data.Transfer> list = authService.ReturnTransfers();
 
-            Console.WriteLine("________________________________");
-            Console.WriteLine("Transfer ID\tFrom/To\tAmount");
+            Console.WriteLine("____________________________________________");
+            Console.WriteLine("Transfer");
+            Console.WriteLine("ID\tFrom/To\t\t\tAmount");
+            Console.WriteLine("____________________________________________");
 
             foreach (Data.Transfer l in list)
             {
-                Console.WriteLine($"{l.TransferId}\t{l.Name}\t{l.Amount}");
+                string displayName;
+
+                if (UserService.GetUserName() == l.ToName)
+                {
+                    displayName = $"From:\t{l.FromName}";
+                }
+                else
+                {
+                    displayName = $"To:  \t{l.ToName}";
+                }
+
+                Console.WriteLine($"{l.TransferId}\t{displayName} \t\t{l.Amount}");
             }
-            Console.WriteLine("________________________________");
+            Console.WriteLine("____________________________________________");
             Console.WriteLine();
 
             return MenuOptionResult.WaitAfterMenuSelection;

@@ -126,7 +126,8 @@ namespace TenmoServer.DAO
             Transfer tr = new Transfer
             {
                 TransferId = Convert.ToInt32(reader["transfer_id"]),
-                Name = Convert.ToString(reader["from"]),
+                FromName = Convert.ToString(reader["from"]),
+                ToName = Convert.ToString(reader["to"]),
                 Amount = Convert.ToDecimal(reader["amount"]),
                 //UserId = Convert.ToInt32(reader["user_id"])
             };
