@@ -24,6 +24,13 @@ namespace TenmoServer.Controllers
             this.userDAO = userDAO;
         }
 
+        [HttpGet("/hello")]
+        public ActionResult Hello()
+        {
+            return Ok(new { Message = "hello" });
+        }
+
+
         [HttpGet("user")]
         [Authorize]
         public ActionResult<Account> GetAccount()
@@ -66,7 +73,7 @@ namespace TenmoServer.Controllers
             return list;
         }
 
-        [HttpPut]
+        [HttpPut] // transfers/transferId
         [Authorize]
         public ActionResult Transfer(Transfer transfer)
         {
@@ -78,7 +85,7 @@ namespace TenmoServer.Controllers
             return Ok();
         }
 
-        [HttpGet("current_user")]
+        [HttpGet("current_user")] // balance - display balance off of account
         [Authorize]
         public ActionResult<decimal> GetBalance()
         {

@@ -56,7 +56,19 @@ namespace TenmoClient.Views
             Console.WriteLine("____________________________________________");
             Console.WriteLine();
             Console.Write("Please enter transfer ID to view details (0 to cancel): ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            string input = Console.ReadLine();
+            if (input == "0")
+            {
+                return MenuOptionResult.DoNotWaitAfterMenuSelection;
+            }
+            if (input.Length == 0)
+            {
+                Console.WriteLine("You must enter an ID or enter 0 to cancel!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+            int id = Convert.ToInt32(input);
+            bool found = false;
             foreach (Data.Transfer l in list)
             {
                 if(l.TransferId == id)
@@ -72,9 +84,16 @@ namespace TenmoClient.Views
                     type = (currentUser == l.ToName) ? "Receive" : "Send";
                     Console.WriteLine($"Type: {type}");
                     Console.WriteLine($"Status: Approved");
-                    Console.WriteLine($"Amount: ${l.Amount}");                     
+                    Console.WriteLine($"Amount: ${l.Amount}");
+                    found = true;
                 }
             }
+            if (!found)
+            {
+                Console.WriteLine("The ID you entered was not valid!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+            }
+
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 
@@ -101,17 +120,26 @@ namespace TenmoClient.Views
             Console.WriteLine();
 
             Console.Write("Enter ID of user you are sending to (0 to cancel): ");
-            transfer.TransferId = Convert.ToInt32(Console.ReadLine());
+            string input = Console.ReadLine();
+            if (input.Length == 0)
+            {
+                Console.WriteLine("You must enter an ID or enter 0 to cancel!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+            transfer.TransferId = Convert.ToInt32(input);
 
             if (transfer.TransferId == 0)
             {
                 Console.WriteLine("The transaction was canceled!");
+                Console.WriteLine("Hit 'Enter' to continue.");
                 return MenuOptionResult.WaitAfterMenuSelection;
             }
 
             if (transfer.TransferId > list.Count)
             {
                 Console.WriteLine("This user does not exist!");
+                Console.WriteLine("Hit 'Enter' to continue.");
                 return MenuOptionResult.WaitAfterMenuSelection;
                 
             }
