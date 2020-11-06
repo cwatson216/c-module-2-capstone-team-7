@@ -50,16 +50,15 @@ namespace TenmoClient.Views
             foreach (Data.Transfer l in list)
             {
                 string displayName;
-                
-                if ( currentUser == l.ToName)
-                {
-                    displayName = $"From:\t{l.FromName}";
-                }
-                else
-                {
-                    displayName = $"To:  \t{l.ToName}";
-                }
-
+                //if ( currentUser == l.ToName)
+                //{
+                //    displayName = $"From:\t{l.FromName}";
+                //}
+                //else
+                //{
+                //    displayName = $"To:  \t{l.ToName}";
+                //}
+                displayName = (currentUser == l.ToName) ? $"From:\t{l.FromName}" : $"To:  \t{l.ToName}";
                 Console.WriteLine($"{l.TransferId}\t{displayName} \t\t${l.Amount}");
             }
             Console.WriteLine("____________________________________________");
@@ -75,14 +74,7 @@ namespace TenmoClient.Views
                     Console.WriteLine($"From: {l.FromName}");
                     Console.WriteLine($"To: {l.ToName}");
                     string type;
-                    if (currentUser == l.ToName)
-                    {
-                        type = "Receive";
-                    }
-                    else
-                    {
-                        type = "Send";
-                    }
+                    type = (currentUser == l.ToName) ? "Receive" : "Send";
                     Console.WriteLine($"Type: {type}");
                     Console.WriteLine($"Status: Approved");
                     Console.WriteLine($"Amount: ${l.Amount}");                     
