@@ -84,6 +84,44 @@ namespace TenmoServer.DAO
             }
         }
 
+        public void RequestTransfer(int userId, int transferId, decimal amount)
+        {
+            int int1 = userId;
+            int int2 = transferId;
+            decimal dec3 = amount;
+
+            Account acc = GetAccount(userId);
+
+            if (acc.Balance >= amount)
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        conn.Open();
+
+                        SqlCommand cmd = new SqlCommand(@"
+
+                        INSERT into transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount) Values (1, 1, @fromId, @toId, @amount)
+
+                        ", conn);
+                        cmd.Parameters.AddWithValue("@toId", userId);
+                        cmd.Parameters.AddWithValue("@fromId", transferId);
+                        cmd.Parameters.AddWithValue("@amount", amount);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (SqlException)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                Console.WriteLine("You don't have enough money!");
+            }
+        }
+
         public List<Transfer> GetTransfers(int userId)
         {
             List<Transfer> returnTransfers = new List<Transfer>();
@@ -135,7 +173,6 @@ namespace TenmoServer.DAO
 
             return tr;
         }
-
 
         public Account GetAccountFromReader(SqlDataReader reader)
         {

@@ -99,7 +99,7 @@ namespace TenmoClient.Views
 
         private MenuOptionResult ViewRequests()
         {
-            Console.WriteLine("Not yet implemented!");
+            
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 
@@ -107,20 +107,7 @@ namespace TenmoClient.Views
         {
             Data.Transfer transfer = new Data.Transfer();
             AuthService authService = new AuthService();
-            List<API_User> list = authService.ReturnUsers();
-
-            Console.WriteLine("________________________________");
-            Console.WriteLine("Users ID\t  Name");
-
-            foreach (API_User l in list)
-            {
-                if (l.UserId != UserService.GetUserId())
-                {
-                    Console.WriteLine($"{l.UserId}\t      {l.Username}");
-                }
-            }
-            Console.WriteLine("________________________________");
-            Console.WriteLine();
+            List<API_User> newList = GetList();
 
             Console.Write("Enter ID of user you are sending to (0 to cancel): ");
             string input = Console.ReadLine();
@@ -139,12 +126,11 @@ namespace TenmoClient.Views
                 return MenuOptionResult.WaitAfterMenuSelection;
             }
 
-            if (transfer.TransferId > list.Count)
+            if (transfer.TransferId > newList.Count)
             {
                 Console.WriteLine("This user does not exist!");
                 Console.WriteLine("Hit 'Enter' to continue.");
                 return MenuOptionResult.WaitAfterMenuSelection;
-                
             }
 
             if (UserService.GetUserId() == transfer.TransferId)
@@ -174,8 +160,73 @@ namespace TenmoClient.Views
 
         private MenuOptionResult RequestTEBucks()
         {
-            Console.WriteLine("Not yet implemented!");
+            Data.Transfer transfer = new Data.Transfer();
+            AuthService authService = new AuthService();
+            List<API_User> newList = GetList();
+
+            Console.Write("Enter ID of user you are requesting from (0 to cancel): ");
+            string input = Console.ReadLine();
+            if (input.Length == 0)
+            {
+                Console.WriteLine("You must enter an ID or enter 0 to cancel!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+            transfer.TransferId = Convert.ToInt32(input);
+
+            if (transfer.TransferId == 0)
+            {
+                Console.WriteLine("The transaction was canceled!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+
+            if (transfer.TransferId > newList.Count)
+            {
+                Console.WriteLine("This user does not exist!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+
+            if (UserService.GetUserId() == transfer.TransferId)
+            {
+                Console.WriteLine("You can not request money from yourself!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+
+            Console.Write("Enter amount: ");
+            transfer.Amount = Convert.ToDecimal(Console.ReadLine());
+            transfer.UserId = UserService.GetUserId();
+
+            authService.RequestTransfer(transfer);
+
+            Console.WriteLine("Success! Request was sent!");
+
             return MenuOptionResult.WaitAfterMenuSelection;
+
+
+        }
+        private List<API_User> GetList()
+        {
+            //Data.Transfer transfer = new Data.Transfer();
+            AuthService authService = new AuthService();
+            List<API_User> list = authService.ReturnUsers();
+
+            Console.WriteLine("________________________________");
+            Console.WriteLine("Users ID\t  Name");
+
+            foreach (API_User l in list)
+            {
+                if (l.UserId != UserService.GetUserId())
+                {
+                    Console.WriteLine($"{l.UserId}\t      {l.Username}");
+                }
+            }
+            Console.WriteLine("________________________________");
+            Console.WriteLine();
+
+            return list;
         }
 
         private MenuOptionResult Logout()

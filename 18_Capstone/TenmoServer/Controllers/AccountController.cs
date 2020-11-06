@@ -83,6 +83,17 @@ namespace TenmoServer.Controllers
             accountDAO.Transfer(int1, int2, dec3);
             return Ok();
         }
+        [HttpPut("request")] 
+        [Authorize]
+        public ActionResult RequestTransfer(Transfer transfer)
+        {
+            int int1 = transfer.UserId;
+            int int2 = transfer.TransferId;
+            decimal dec3 = transfer.Amount;
+
+            accountDAO.RequestTransfer(int1, int2, dec3);
+            return Ok();
+        }
         public int GetUserId()
         {
             System.Security.Claims.Claim claim = User.Claims.Where(c => c.Type == "sub").FirstOrDefault();

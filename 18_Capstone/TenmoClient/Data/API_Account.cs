@@ -18,6 +18,7 @@ namespace TenmoClient.Data
         public decimal Amount { get; set; }
         public string FromName { get; set; } 
         public string ToName { get; set; }
+        public string Status { get; set; }
     }
 
 }
