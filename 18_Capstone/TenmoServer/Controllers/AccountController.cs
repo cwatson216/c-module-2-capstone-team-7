@@ -55,7 +55,9 @@ namespace TenmoServer.Controllers
         [Authorize]
         public ActionResult<List<Transfer>> GetTransfers()
         {
-            List<Transfer> list = accountDAO.GetTransfers();
+            int id = GetUserId();
+
+            List<Transfer> list = accountDAO.GetTransfers(id);
 
             if (list == null)
             {

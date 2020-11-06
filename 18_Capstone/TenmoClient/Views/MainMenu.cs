@@ -60,10 +60,12 @@ namespace TenmoClient.Views
                     displayName = $"To:  \t{l.ToName}";
                 }
 
-                Console.WriteLine($"{l.TransferId}\t{displayName} \t\t{l.Amount}");
+                Console.WriteLine($"{l.TransferId}\t{displayName} \t\t${l.Amount}");
             }
             Console.WriteLine("____________________________________________");
             Console.WriteLine();
+            Console.Write("Please enter transfer ID to view details (0 to cancel): ");
+            int id = Convert.ToInt32(Console.ReadLine());
 
             return MenuOptionResult.WaitAfterMenuSelection;
         }

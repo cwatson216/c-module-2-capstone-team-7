@@ -1,10 +1,16 @@
 
-
 select transfer_id, account_from AS 'from',u.username , account_to AS 'to', ur.username, amount
 	from transfers t
 	JOIN accounts a on a.account_id = t.account_from
 	JOIN users u on u.user_id = t.account_from
 	JOIN users ur on ur.user_id = t.account_to
+
+select transfer_id, u.username AS 'from', ur.username AS 'to', amount
+	from transfers t
+	JOIN accounts a on a.account_id = t.account_from
+	JOIN users u on u.user_id = t.account_from
+	JOIN users ur on ur.user_id = t.account_to
+	Where t.account_from = 4 OR t.account_to = 4
 
 
 select * from transfers
@@ -15,6 +21,12 @@ select * from transfer_types
 
 select * from transfer_statuses
 
+                        select transfer_id, u.username AS 'from', ur.username AS 'to', amount
+	                        from transfers t
+	                        JOIN accounts a on a.account_id = t.account_from
+	                        JOIN users u on u.user_id = t.account_from
+	                        JOIN users ur on ur.user_id = t.account_to
+                            Where u.username = 'from' OR u.username = 'to'
 
 INSERT into transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount) Values (2, 2, 1, 2, 100)
 

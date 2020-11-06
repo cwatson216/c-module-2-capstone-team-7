@@ -84,9 +84,11 @@ namespace TenmoServer.DAO
             }
         }
 
-        public List<Transfer> GetTransfers()
+        public List<Transfer> GetTransfers(int userId)
         {
             List<Transfer> returnTransfers = new List<Transfer>();
+            
+            //Account acc = GetAccount(userId);
 
             try
             {
@@ -100,7 +102,9 @@ namespace TenmoServer.DAO
 	                        JOIN accounts a on a.account_id = t.account_from
 	                        JOIN users u on u.user_id = t.account_from
 	                        JOIN users ur on ur.user_id = t.account_to
+                            Where t.account_from = @userid OR t.account_to = @userid
                         ", conn);
+                    cmd.Parameters.AddWithValue("@userid", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     if (reader.HasRows)
@@ -129,7 +133,7 @@ namespace TenmoServer.DAO
                 FromName = Convert.ToString(reader["from"]),
                 ToName = Convert.ToString(reader["to"]),
                 Amount = Convert.ToDecimal(reader["amount"]),
-                //UserId = Convert.ToInt32(reader["user_id"])
+                //UserId = Convert.ToInt32(reader["@userid"])
             };
 
             return tr;
