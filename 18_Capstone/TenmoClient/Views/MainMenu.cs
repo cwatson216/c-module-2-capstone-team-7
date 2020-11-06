@@ -46,12 +46,12 @@ namespace TenmoClient.Views
             Console.WriteLine("Transfer");
             Console.WriteLine("ID\tFrom/To\t\t\tAmount");
             Console.WriteLine("____________________________________________");
-
+            string currentUser = UserService.GetUserName();
             foreach (Data.Transfer l in list)
             {
                 string displayName;
-
-                if (UserService.GetUserName() == l.ToName)
+                
+                if ( currentUser == l.ToName)
                 {
                     displayName = $"From:\t{l.FromName}";
                 }
@@ -66,7 +66,28 @@ namespace TenmoClient.Views
             Console.WriteLine();
             Console.Write("Please enter transfer ID to view details (0 to cancel): ");
             int id = Convert.ToInt32(Console.ReadLine());
-
+            foreach (Data.Transfer l in list)
+            {
+                if(l.TransferId == id)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"Id: { l.TransferId}");
+                    Console.WriteLine($"From: {l.FromName}");
+                    Console.WriteLine($"To: {l.ToName}");
+                    string type;
+                    if (currentUser == l.ToName)
+                    {
+                        type = "Receive";
+                    }
+                    else
+                    {
+                        type = "Send";
+                    }
+                    Console.WriteLine($"Type: {type}");
+                    Console.WriteLine($"Status: Approved");
+                    Console.WriteLine($"Amount: ${l.Amount}");                     
+                }
+            }
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 
