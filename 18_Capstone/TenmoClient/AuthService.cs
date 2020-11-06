@@ -159,7 +159,7 @@ namespace TenmoClient
         }
         public List<Transfer> ReturnTransfers()
         {
-            RestRequest request = new RestRequest(API_BASE_URL + "account");
+            RestRequest request = new RestRequest(API_BASE_URL + "account/transfers");
             client.Authenticator = new JwtAuthenticator(UserService.GetToken());
             IRestResponse<List<Transfer>> response = client.Get<List<Transfer>>(request);
 

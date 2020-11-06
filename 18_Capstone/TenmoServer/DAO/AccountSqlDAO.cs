@@ -95,7 +95,7 @@ namespace TenmoServer.DAO
                     conn.Open();
 
                     SqlCommand cmd = new SqlCommand(@"
-                        select transfer_id, account_from AS 'from',u.username , account_to AS 'to', ur.username, amount
+                        select transfer_id, u.username AS 'from', ur.username AS 'to', amount
 	                        from transfers t
 	                        JOIN accounts a on a.account_id = t.account_from
 	                        JOIN users u on u.user_id = t.account_from
@@ -126,9 +126,9 @@ namespace TenmoServer.DAO
             Transfer tr = new Transfer
             {
                 TransferId = Convert.ToInt32(reader["transfer_id"]),
-                Name = Convert.ToString(reader["username"]),
+                Name = Convert.ToString(reader["from"]),
                 Amount = Convert.ToDecimal(reader["amount"]),
-                UserId = Convert.ToInt32(reader["user_id"])
+                //UserId = Convert.ToInt32(reader["user_id"])
             };
 
             return tr;

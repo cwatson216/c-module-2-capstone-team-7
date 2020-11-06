@@ -51,18 +51,18 @@ namespace TenmoServer.Controllers
             return list;
         }
 
-        //[HttpGet]
-        //[Authorize]
-        //public ActionResult<List<Transfer>> GetTransfers()
-        //{
-        //    List<Transfer> list = accountDAO.Transfer
+        [HttpGet("transfers")]
+        [Authorize]
+        public ActionResult<List<Transfer>> GetTransfers()
+        {
+            List<Transfer> list = accountDAO.GetTransfers();
 
-        //    if (list == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return list;
-        //}
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return list;
+        }
 
         [HttpPut]
         [Authorize]

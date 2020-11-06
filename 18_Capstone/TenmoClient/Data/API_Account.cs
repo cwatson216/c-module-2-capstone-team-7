@@ -16,7 +16,7 @@ namespace TenmoClient.Data
         public int UserId { get; set; }
         public int TransferId { get; set; }
         public decimal Amount { get; set; }
-        public string Name { get; set; } = "";
+        public string Name { get; set; } 
     }
 
 }

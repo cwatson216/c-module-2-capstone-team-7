@@ -37,10 +37,21 @@ namespace TenmoClient.Views
 
         private MenuOptionResult ViewTransfers()
         {
+            Data.Transfer transfer = new Data.Transfer();
+            AuthService authService = new AuthService();
+            transfer.UserId = UserService.GetUserId();
+            List<Data.Transfer> list = authService.ReturnTransfers();
 
+            Console.WriteLine("________________________________");
+            Console.WriteLine("Transfer ID\tFrom/To\tAmount");
 
+            foreach (Data.Transfer l in list)
+            {
+                Console.WriteLine($"{l.TransferId}\t{l.Name}\t{l.Amount}");
+            }
+            Console.WriteLine("________________________________");
+            Console.WriteLine();
 
-            Console.WriteLine("Not yet implemented!");
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 
