@@ -31,7 +31,7 @@ namespace TenmoClient.Views
         {
             AuthService authService = new AuthService();
             decimal d = authService.GetBalance();
-            Console.WriteLine($"Your current account balance is: ${d}");
+            Console.WriteLine($"Your current account balance is: {d:c}");
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 
@@ -114,7 +114,10 @@ namespace TenmoClient.Views
 
             foreach (API_User l in list)
             {
-                Console.WriteLine($"{l.UserId}\t      {l.Username}");
+                if (l.UserId != UserService.GetUserId())
+                {
+                    Console.WriteLine($"{l.UserId}\t      {l.Username}");
+                }
             }
             Console.WriteLine("________________________________");
             Console.WriteLine();
@@ -142,6 +145,13 @@ namespace TenmoClient.Views
                 Console.WriteLine("Hit 'Enter' to continue.");
                 return MenuOptionResult.WaitAfterMenuSelection;
                 
+            }
+
+            if (UserService.GetUserId() == transfer.TransferId)
+            {
+                Console.WriteLine("You can not send money to yourself!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
             }
 
             Console.Write("Enter amount: ");

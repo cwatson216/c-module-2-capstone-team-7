@@ -3,6 +3,7 @@ using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using TenmoClient.Data;
+using TenmoServer.Models;
 
 namespace TenmoClient
 {
@@ -12,7 +13,7 @@ namespace TenmoClient
         private readonly IRestClient client = new RestClient();
 
         //login endpoints//
-        public bool Register(LoginUser registerUser)
+        public bool Register(Data.LoginUser registerUser)
         {
             RestRequest request = new RestRequest(API_BASE_URL + "login/register");
             request.AddJsonBody(registerUser);
@@ -41,7 +42,7 @@ namespace TenmoClient
             }
         }
 
-        public API_User Login(LoginUser loginUser)
+        public API_User Login(Data.LoginUser loginUser)
         {
             RestRequest request = new RestRequest(API_BASE_URL + "login");
             request.AddJsonBody(loginUser);
@@ -73,9 +74,9 @@ namespace TenmoClient
 
         public decimal GetBalance()
         {
-            RestRequest request = new RestRequest(API_BASE_URL + $"account/current_user");
+            RestRequest request = new RestRequest(API_BASE_URL + $"account/user");
             client.Authenticator = new JwtAuthenticator(UserService.GetToken());
-            IRestResponse<decimal> response = client.Get<decimal>(request);
+            IRestResponse<API_Account> response = client.Get<API_Account>(request);
 
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
@@ -96,7 +97,7 @@ namespace TenmoClient
             }
             else
             {
-                return response.Data;
+                return response.Data.Balance;
             }
         }
         public List<API_User> ReturnUsers()
@@ -127,7 +128,7 @@ namespace TenmoClient
                 return response.Data;
             }
         }
-        public bool Transfer(Transfer transfer)
+        public bool Transfer(Data.Transfer transfer)
         {
 
             RestRequest request = new RestRequest(API_BASE_URL + "account");
@@ -157,11 +158,11 @@ namespace TenmoClient
                 return true;
             }
         }
-        public List<Transfer> ReturnTransfers()
+        public List<Data.Transfer> ReturnTransfers()
         {
             RestRequest request = new RestRequest(API_BASE_URL + "account/transfers");
             client.Authenticator = new JwtAuthenticator(UserService.GetToken());
-            IRestResponse<List<Transfer>> response = client.Get<List<Transfer>>(request);
+            IRestResponse<List<Data.Transfer>> response = client.Get<List<Data.Transfer>>(request);
 
             if (response.ResponseStatus != ResponseStatus.Completed)
             {

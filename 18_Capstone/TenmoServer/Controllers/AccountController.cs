@@ -30,7 +30,6 @@ namespace TenmoServer.Controllers
             return Ok(new { Message = "hello" });
         }
 
-
         [HttpGet("user")]
         [Authorize]
         public ActionResult<Account> GetAccount()
@@ -83,20 +82,6 @@ namespace TenmoServer.Controllers
 
             accountDAO.Transfer(int1, int2, dec3);
             return Ok();
-        }
-
-        [HttpGet("current_user")] // balance - display balance off of account
-        [Authorize]
-        public ActionResult<decimal> GetBalance()
-        {
-            int id = GetUserId();
-
-            Account acc = accountDAO.GetAccount(id);
-            if (acc == null)
-            {
-                return NotFound();
-            }
-            return acc.Balance;
         }
         public int GetUserId()
         {
