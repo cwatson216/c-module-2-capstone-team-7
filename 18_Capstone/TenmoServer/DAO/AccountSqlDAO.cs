@@ -174,6 +174,45 @@ namespace TenmoServer.DAO
             return tr;
         }
 
+        public List<Transfer> GetRequests(int userId)
+        {
+            List<Transfer> returnTransfers = new List<Transfer>();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand(@"
+                        select transfer_id,transfer_status_id, u.username AS 'from', ur.username AS 'to', amount
+	                        from transfers t
+	                        JOIN accounts a on a.account_id = t.account_from
+	                        JOIN users u on u.user_id = t.account_from
+	                        JOIN users ur on ur.user_id = t.account_to
+	                        Where t.account_from = @userid AND transfer_status_id = 1
+                        ", conn);
+                    cmd.Parameters.AddWithValue("@userid", userId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            Transfer t = GetTransferFromReader(reader);
+                            returnTransfers.Add(t);
+                        }
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+
+            return returnTransfers;
+        }
+
         public Account GetAccountFromReader(SqlDataReader reader)
         {
             Account acc = new Account

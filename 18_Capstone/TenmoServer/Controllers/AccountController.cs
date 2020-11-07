@@ -71,6 +71,20 @@ namespace TenmoServer.Controllers
             }
             return list;
         }
+        [HttpGet("requests")]
+        [Authorize]
+        public ActionResult<List<Transfer>> GetRequests()
+        {
+            int id = GetUserId();
+
+            List<Transfer> list = accountDAO.GetRequests(id);
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return list;
+        }
 
         [HttpPut] // transfers/transferId
         [Authorize]

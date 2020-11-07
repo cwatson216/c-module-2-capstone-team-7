@@ -99,7 +99,61 @@ namespace TenmoClient.Views
 
         private MenuOptionResult ViewRequests()
         {
-            
+            Data.Transfer transfer = new Data.Transfer();
+            AuthService authService = new AuthService();
+            transfer.UserId = UserService.GetUserId();
+            List<Data.Transfer> list = authService.ReturnRequests();
+
+            Console.WriteLine("____________________________________________");
+            Console.WriteLine("Pending Transfers");
+            Console.WriteLine("ID\tTo\t\t\tAmount");
+            Console.WriteLine("____________________________________________");
+            string currentUser = UserService.GetUserName();
+            foreach (Data.Transfer l in list)
+            {
+                Console.WriteLine($"{l.TransferId}\t{l.ToName} \t\t${l.Amount}");
+            }
+            Console.WriteLine("____________________________________________");
+            Console.WriteLine();
+            Console.Write("Please enter transfer ID to approve/reject (0 to cancel): ");
+            string input = Console.ReadLine();
+            if (input == "0")
+            {
+                return MenuOptionResult.DoNotWaitAfterMenuSelection;
+            }
+            if (input.Length == 0)
+            {
+                Console.WriteLine("You must enter an ID or enter 0 to cancel!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+            int id = Convert.ToInt32(input);
+            bool found = false;
+            foreach (Data.Transfer l in list)
+            {
+                if (l.TransferId == id)
+                {
+                    Console.WriteLine("____________________________________________");
+                    Console.WriteLine("Transfer Details");
+                    Console.WriteLine("____________________________________________");
+                    Console.WriteLine();
+                    Console.WriteLine($"Id: { l.TransferId}");
+                    Console.WriteLine($"From: {l.FromName}");
+                    Console.WriteLine($"To: {l.ToName}");
+                    string type;
+                    type = (currentUser == l.ToName) ? "Receive" : "Send";
+                    Console.WriteLine($"Type: {type}");
+                    Console.WriteLine($"Status: Approved");
+                    Console.WriteLine($"Amount: ${l.Amount}");
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                Console.WriteLine("The ID you entered was not valid!");
+                Console.WriteLine("Hit 'Enter' to continue.");
+            }
+
             return MenuOptionResult.WaitAfterMenuSelection;
         }
 

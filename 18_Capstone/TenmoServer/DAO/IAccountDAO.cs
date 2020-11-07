@@ -12,5 +12,6 @@ namespace TenmoServer.DAO
         void Transfer(int userId, int transferId, decimal amount);
         List<Transfer> GetTransfers(int userId);
         void RequestTransfer(int userId, int transferId, decimal amount);
+        List<Transfer> GetRequests(int userId);
     }
 }
