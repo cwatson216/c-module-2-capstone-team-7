@@ -1,6 +1,7 @@
 ﻿using MenuFramework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using TenmoClient.Data;
 using TenmoServer.Controllers;
@@ -71,7 +72,7 @@ namespace TenmoClient.Views
             bool found = false;
             foreach (Data.Transfer l in list)
             {
-                if(l.TransferId == id)
+                if (l.TransferId == id)
                 {
                     Console.WriteLine("____________________________________________");
                     Console.WriteLine("Transfer Details");
@@ -138,20 +139,60 @@ namespace TenmoClient.Views
                     Console.WriteLine("____________________________________________");
                     Console.WriteLine();
                     Console.WriteLine($"Id: { l.TransferId}");
-                    Console.WriteLine($"From: {l.FromName}");
                     Console.WriteLine($"To: {l.ToName}");
-                    string type;
-                    type = (currentUser == l.ToName) ? "Receive" : "Send";
-                    Console.WriteLine($"Type: {type}");
-                    Console.WriteLine($"Status: Approved");
+                    Console.WriteLine($"Status: Pending");
                     Console.WriteLine($"Amount: ${l.Amount}");
+                    transfer.Amount = l.Amount;
+                    transfer.ToName = l.ToName;
+                    transfer.TransferIdColum = l.TransferId;
+                    transfer.TransferId = l.TransferId;
                     found = true;
+
+                    // TransferId and TransferIdcolum names need to be changed
+                    // TransferId is getting passed as 0 when going through controller????
+
                 }
             }
             if (!found)
             {
                 Console.WriteLine("The ID you entered was not valid!");
                 Console.WriteLine("Hit 'Enter' to continue.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+            Console.WriteLine("____________________________________________");
+            Console.WriteLine("1: Approve");
+            Console.WriteLine("2: Reject");
+            Console.WriteLine("0: Don't approve or reject");
+            Console.WriteLine("------");
+            Console.WriteLine("Please choose an option");
+            string reader = Console.ReadLine();
+
+            if (reader == "0")
+            {
+                Console.WriteLine("Transfer will remain pending.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+            if (reader == "1")
+            {
+                
+                transfer.UserId = UserService.GetUserId();
+                transfer.Status = true;
+                authService.UpdateTransfer(transfer);
+                Console.WriteLine("The transfer has been approved. The amount will be deducted from your account.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+            if (reader == "2")
+            {
+                transfer.UserId = UserService.GetUserId();
+                transfer.Status = false;
+                authService.UpdateTransfer(transfer);
+                Console.WriteLine("The transfer has been rejected. The amount will not be deducted from your account.");
+                return MenuOptionResult.WaitAfterMenuSelection;
+            }
+            if (reader != "0" || reader != "1" || reader != "2")
+            {
+                Console.WriteLine("You did not enter a given choice.");
+                return MenuOptionResult.WaitAfterMenuSelection;
             }
 
             return MenuOptionResult.WaitAfterMenuSelection;

@@ -213,6 +213,61 @@ namespace TenmoServer.DAO
             return returnTransfers;
         }
 
+        public void UpdateTransfer(int toId, int fromId, decimal amount, int transId, bool approve)
+        {
+            int int1 = toId;
+            int int2 = fromId;
+            decimal dec3 = amount;
+            int int3 = transId;
+            bool approved = approve;
+
+            Account acc = GetAccount(fromId);
+
+            if (acc.Balance >= amount)
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        conn.Open();
+
+                        if (approve)
+                        {
+                        SqlCommand cmd = new SqlCommand(@"
+                            BEGIN TRANSACTION
+                            UPDATE transfers set transfer_status_id = 2 where transfer_id = @transID
+                            UPDATE accounts set balance = balance - @amount where account_id = @fromId
+                            UPDATE accounts set balance = balance + @amount where account_id = @toId
+                            COMMIT TRANSACTION
+
+                        ", conn);
+                        cmd.Parameters.AddWithValue("@fromId", fromId);
+                        cmd.Parameters.AddWithValue("@toId", toId);
+                        cmd.Parameters.AddWithValue("@amount", amount);
+                        cmd.Parameters.AddWithValue("@transID", transId);
+                        cmd.ExecuteNonQuery();
+                        }
+                        if (!approve)
+                        {
+                            SqlCommand cmd = new SqlCommand(@"
+                            UPDATE transfers set transfer_status_id = 3 where transfer_id = @transID
+                        ", conn);
+                            cmd.Parameters.AddWithValue("@transID", transId);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (SqlException)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                Console.WriteLine("You don't have enough money!");
+            }
+        }
+
         public Account GetAccountFromReader(SqlDataReader reader)
         {
             Account acc = new Account
@@ -224,5 +279,6 @@ namespace TenmoServer.DAO
 
             return acc;
         }
+
     }
 }

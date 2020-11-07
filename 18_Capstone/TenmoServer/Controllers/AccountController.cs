@@ -85,6 +85,19 @@ namespace TenmoServer.Controllers
             }
             return list;
         }
+        [HttpPut("update")] // transfers/transferId
+        [Authorize]
+        public ActionResult UpdateTransfer(Transfer transfer)
+        {
+            int fromId = transfer.UserId;
+            int toId = transfer.TransferId;
+            decimal amount = transfer.Amount;
+            int transId = transfer.TransferIdColum;
+            bool approve = transfer.Status;
+
+            accountDAO.UpdateTransfer(toId, fromId, amount, transId, approve);
+            return Ok();
+        }
 
         [HttpPut] // transfers/transferId
         [Authorize]

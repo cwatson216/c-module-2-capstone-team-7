@@ -20,6 +20,8 @@ namespace TenmoServer.Models
         public decimal Amount { get; set; }
         public string FromName { get; set; }
         public string ToName { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
+        public int TransferIdColum { get; set; }
+        public int ToId { get; set; }
     }
 }
