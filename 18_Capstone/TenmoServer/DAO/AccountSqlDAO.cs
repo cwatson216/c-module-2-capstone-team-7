@@ -138,7 +138,7 @@ namespace TenmoServer.DAO
 	                        JOIN accounts a on a.account_id = t.account_from
 	                        JOIN users u on u.user_id = t.account_from
 	                        JOIN users ur on ur.user_id = t.account_to
-                            Where t.account_from = @userid OR t.account_to = @userid
+                            Where (t.account_from = @userid OR t.account_to = @userid) AND transfer_status_id = 2
                         ", conn);
                     cmd.Parameters.AddWithValue("@userid", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -213,9 +213,9 @@ namespace TenmoServer.DAO
             return returnTransfers;
         }
 
-        public void UpdateTransfer(int toId, int fromId, decimal amount, int transId, bool approve)
+        public void UpdateTransfer(int fromId, decimal amount, int transId, bool approve)
         {
-            int int1 = toId;
+            //int int1 = toId;
             int int2 = fromId;
             decimal dec3 = amount;
             int int3 = transId;
@@ -237,12 +237,12 @@ namespace TenmoServer.DAO
                             BEGIN TRANSACTION
                             UPDATE transfers set transfer_status_id = 2 where transfer_id = @transID
                             UPDATE accounts set balance = balance - @amount where account_id = @fromId
-                            UPDATE accounts set balance = balance + @amount where account_id = @toId
+                            UPDATE accounts set balance = balance + @amount where account_id = (Select account_to from transfers where transfer_id = @transID)
                             COMMIT TRANSACTION
 
                         ", conn);
                         cmd.Parameters.AddWithValue("@fromId", fromId);
-                        cmd.Parameters.AddWithValue("@toId", toId);
+                    //    cmd.Parameters.AddWithValue("@toId", toId);
                         cmd.Parameters.AddWithValue("@amount", amount);
                         cmd.Parameters.AddWithValue("@transID", transId);
                         cmd.ExecuteNonQuery();

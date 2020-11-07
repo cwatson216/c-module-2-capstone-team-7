@@ -95,7 +95,7 @@ namespace TenmoServer.Controllers
             int transId = transfer.TransferIdColum;
             bool approve = transfer.Status;
 
-            accountDAO.UpdateTransfer(toId, fromId, amount, transId, approve);
+            accountDAO.UpdateTransfer(fromId, amount, transId, approve);
             return Ok();
         }
 

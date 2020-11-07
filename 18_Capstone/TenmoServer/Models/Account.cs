@@ -22,6 +22,6 @@ namespace TenmoServer.Models
         public string ToName { get; set; }
         public bool Status { get; set; }
         public int TransferIdColum { get; set; }
-        public int ToId { get; set; }
+//public int ToId { get; set; }
     }
 }
